@@ -1,0 +1,16 @@
+version: '2'
+services:
+  amqpconsoleapplication-mongodb:
+    image: mongo:4.0.13
+    ports:
+      - '27017:27017'
+    command: mongos --configdb amqpconsoleapplication-mongodb-config
+  amqpconsoleapplication-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  amqpconsoleapplication-mongodb-config:
+    image: mongo:4.0.13
+    container_name: amqpconsoleapplication-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
